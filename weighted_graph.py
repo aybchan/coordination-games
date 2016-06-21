@@ -84,9 +84,9 @@ def connected_nodes(node, graph):
 
   for i in range(0,len(connected_edges)):
     if connected_edges[i][0][0] == node:
-      connected_nodes.append(connected_edges[i][0][1])
+      connected_nodes.append((connected_edges[i][0][1],connected_edges[i][1]))
     else:
-      connected_nodes.append(connected_edges[i][0][0])
+      connected_nodes.append((connected_edges[i][0][0],connected_edges[i][1]))
 
   return connected_nodes
 
@@ -119,40 +119,70 @@ def social(graph):
 # Return the best response of a ndoe
 def best_response(node, graph):
   best = graph.chosen[node]
-  linked_nodes = connected_nodes(node,graph)
-  connected_strategies = [graph.chosen[n] for n in linked_nodes]
-  connected_strategies = [i for i in connected_strategies if i in graph.available[node]]
-  connected_strategies = list(OrderedDict.fromkeys(sorted(connected_strategies,key=connected_strategies.count, reverse=True)))
-  print("Node ", node,"---", " Best strategies (descending):", connected_strategies)
 
   if len(graph.available[node]) < 2:
     print("Only one strategy available. No change.")
     return best
-  else:
-    for strat in connected_strategies:
-      if strat == graph.chosen[node]:
-        print("", strat, " is already optimal. No change.")
-        return graph.chosen[node]
+
+  linked_nodes = connected_nodes(node,graph)
+  connected_strategies = [(graph.chosen[n[0]],n[1]) for n in linked_nodes]
+  connected_strategies = [i for i in connected_strategies if i[0] in graph.available[node]]
+
+  strategy_set = sorted(list(set([x[0] for x in connected_strategies])))
+
+  agg_weights = []
+  for s in strategy_set:
+    weight = 0
+    for c in connected_strategies:
+      if c[0] == s:
+        weight += c[1]
+    agg_weights.append((weight,s))
+
+  sorted(agg_weights, reverse=True)
+
+  for w in agg_weights:
+    if w[1] == graph.chosen[node]:
+      print(w[1], "is already optimal. No change.")
+      return graph.chosen[node]
+    else:
+      if w[0] > payoff(node,graph):
+        print("Strategy changed from", graph.chosen[node], "to", w[1])
+        return w[1]
       else:
-        print("", "Strategy changed from ", graph.chosen[node], " to ", strat)
-        return strat
+        print(w[1], "is already optimal. No change.")
+        return graph.chosen[node]
 
 # Same as best_response() but without messages
 def best_response_non_verbose(node, graph):
   best = graph.chosen[node]
-  linked_nodes = connected_nodes(node,graph)
-  connected_strategies = [graph.chosen[n] for n in linked_nodes]
-  connected_strategies = [i for i in connected_strategies if i in graph.available[node]]
-  connected_strategies = list(OrderedDict.fromkeys(sorted(connected_strategies,key=connected_strategies.count, reverse=True)))
 
   if len(graph.available[node]) < 2:
     return best
-  else:
-    for strat in connected_strategies:
-      if strat == graph.chosen[node]:
-        return graph.chosen[node]
+
+  linked_nodes = connected_nodes(node,graph)
+  connected_strategies = [(graph.chosen[n[0]],n[1]) for n in linked_nodes]
+  connected_strategies = [i for i in connected_strategies if i[0] in graph.available[node]]
+
+  strategy_set = sorted(list(set([x[0] for x in connected_strategies])))
+
+  agg_weights = []
+  for s in strategy_set:
+    weight = 0
+    for c in connected_strategies:
+      if c[0] == s:
+        weight += c[1]
+    agg_weights.append((weight,s))
+
+  sorted(agg_weights, reverse=True)
+
+  for w in agg_weights:
+    if w[1] == graph.chosen[node]:
+      return graph.chosen[node]
+    else:
+      if w[0] > payoff(node,graph):
+        return w[1]
       else:
-        return strat
+        return graph.chosen[node]
 
 # Update strategy choice of a node
 def update_strategy(node, new_strategy, graph):
@@ -262,4 +292,3 @@ def example_experiment():
     gen_data(i, 20, 3, 1000)
   # plot the points
   scatter_plot()
-
