@@ -270,7 +270,11 @@ def averages():
 
 # Generate a 3D scatter plot of the generated data
 def scatter_plot():
-  plot.scatter(data)
+  plot.scatter3d(data)
+
+# Generate a 2D scatter plot of the generated data
+def scatter2d():
+  plot.scatter2d(data)
 
 # write data array to json file
 def save():

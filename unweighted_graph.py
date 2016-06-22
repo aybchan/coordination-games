@@ -218,9 +218,13 @@ def gen_dataset(start_size,end_size,num_datapoints,num_strategies):
       test = cycle_nash_test(0,generate_graph(size,random.random(),num_strategies))
       data[i].append((size,test[1],test[3]))
 
-# Generate a 3D scatter plot of the generated data
+# Generate a 3D scatter plot of the data
 def scatter_plot():
-  plot.scatter(data)
+  plot.scatter3d(data)
+
+# Generate a 2D scatter plot of the data
+def scatter2d():
+  plot.scatter2d(data)
 
 # write data array to json file
 def save():
