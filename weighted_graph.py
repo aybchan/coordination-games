@@ -3,6 +3,7 @@ import random
 import tabulate
 import numpy as np
 import plot
+import data as dt
 
 from tabulate import tabulate
 
@@ -25,7 +26,6 @@ def generate_graph(nodes, probability, num_strategies, weight):
   strategy_set = power_set(strategies(num_strategies))
 
   j = 1
-
   # for all nodes, starting from node 0
   for n in range(0, nodes):
     graph.nodes = graph.nodes.union({n})
@@ -56,7 +56,6 @@ def power_set(strategy_set):
       power_set=power_set+[list(sub_set)+[elem]]
   power_set.remove([])
   return power_set
-
 
 # Print a graph
 def tabulate_graph(graph):
@@ -272,6 +271,10 @@ def averages():
 # Generate a 3D scatter plot of the generated data
 def scatter_plot():
   plot.scatter(data)
+
+# write data array to json file
+def save():
+  dt.save(data)
 
 #example_graph = Graph({0,1,2,3},{(0,1),(1,2),(2,3),(0,3)},[0,1,0,1],[[0,1],[0,1],[0,1],[0,1]],2,1000)
 #example_random_graph = generate_graph(100,random.random(),10)
