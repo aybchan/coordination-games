@@ -1,11 +1,10 @@
 #!/usr/local/bin/python
 import random
 import tabulate
-import matplotlib.pyplot as plt
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
+import plot
+
 from tabulate import tabulate
-from collections import OrderedDict
 
 data = []
 
@@ -25,11 +24,10 @@ def generate_graph(nodes, probability, num_strategies, weight):
   graph = Graph(set(),set(),[],[],num_strategies,weight)
   strategy_set = power_set(strategies(num_strategies))
 
-  i = 0
   j = 1
 
   # for all nodes, starting from node 0
-  for n in range(i, nodes):
+  for n in range(0, nodes):
     graph.nodes = graph.nodes.union({n})
     for m in range(j, nodes):
       if random.random() < probability:
@@ -244,13 +242,17 @@ def cycle_nash_test(node, graph):
   print("[nodes:", len(graph.nodes),"| edges:",len(graph.edges),"| strategies:",graph.num_strategies,"]","\tNash equilibrium found after", count, "iterations!")
   return(len(graph.nodes), len(graph.edges), graph.num_strategies, count)
 
+# generate a set of data for graphs with size over a given range
+def gen_dataset(start_size,end_size,num_datapoints,num_strategies,weight):
+  i = len(data)
+  data.append([])
+  for size in range(start_size,end_size):
+    for point in range(0,num_datapoints):
+      test = cycle_nash_test(0,generate_graph(size,random.random(),num_strategies, weight))
+      data[i].append((size,test[1],test[3]))
+
 # Generate test data for graphs of given node-size,
 # random edges, and given strategy set size
-def gen_data(nodes, num_datapoints, num_strategies, weight):
-  for p in range(0,num_datapoints):
-    test = cycle_nash_test(0,generate_graph(nodes,random.random(),num_strategies, weight))
-    data.append((nodes,test[1],test[3]))
-
 
 def averages():
   data_list = []
@@ -269,26 +271,14 @@ def averages():
 
 # Generate a 3D scatter plot of the generated data
 def scatter_plot():
-  nodes = [data[i][0] for i in range(len(data))]
-  edges = [data[i][1] for i in range(len(data))]
-  iterations = [data[i][2] for i in range(len(data))]
-  fig = plt.figure()
-  ax = fig.add_subplot(111, projection='3d')
-  ax.scatter(nodes,edges,iterations)
-  ax.set_xlabel('nodes')
-  ax.set_ylabel('edges')
-  ax.set_zlabel('iterations')
-  plt.show()
+  plot.scatter(data)
 
-#example_graph = Graph({0,1,2,3},{(0,1),(1,2),(2,3),(0,3)},[0,1,0,1],[[0,1],[0,1],[0,1],[0,1]],2)
-#example_nash_cycle = cycle_nash(0, generate_graph(90,0.5,3)
+#example_graph = Graph({0,1,2,3},{(0,1),(1,2),(2,3),(0,3)},[0,1,0,1],[[0,1],[0,1],[0,1],[0,1]],2,1000)
+#example_random_graph = generate_graph(100,random.random(),10)
+#example_nash_cycle = cycle_nash(0, example_random_graph)
 
 # generate 2000 datapoints for games with 3 strategies and draw plot
 def example_experiment():
-  # generate data for graphs of size 1 to 100 nodes#
-  for i in range(1, 101):
-    # generate 20 data points for each graph of size i
-    # for 3 strategy games
-    gen_data(i, 20, 3, 1000)
-  # plot the points
+  # generate 20 datapoints each for random graphs of size 1 to 100 nodes with 10-strategy games and max edge weight of 1,000,000
+  gen_dataset(1,100,20,10,1000000)
   scatter_plot()
