@@ -3,7 +3,7 @@ import random
 import tabulate
 import numpy as np
 import plot
-import data as dtG
+import data as dt
 
 from tabulate import tabulate
 from collections import OrderedDict
