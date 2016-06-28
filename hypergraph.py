@@ -3,6 +3,7 @@ import random
 import tabulate
 import numpy as np
 import plot
+import data as dt
 
 from tabulate import tabulate
 from collections import OrderedDict
@@ -81,18 +82,6 @@ def power_set(strategy_set):
       power_set=power_set+[list(sub_set)+[elem]]
   power_set.remove([])
   return power_set
-
-def speculate_payoff(node,graph):
-  edges = node_edges(node,graph)
-  strategies = []
-  for i in range(0,len(edges)):
-    for j in range(0,len(edges[i][0])):
-      if graph.chosen[edges[i][0][j]] not in strategies:
-        strategies.append(graph.chosen[edges[i][0][j]])
-  strategies = sorted(strategies)
-
-  agg_spec = []
-  return strategies
 
 # Print a graph
 def tabulate_graph(graph):
@@ -243,7 +232,7 @@ def cycle_nash_test(node, graph):
       nash_count = 0
       strategy_set = graph.chosen[:]
   p += 1
-  print("[nodes:", len(graph.nodes),"| edges:",len(graph.edges),"| strategies:",graph.num_strategies,"]","\tNash equilibrium found after", count, "iterations!")
+  # print("[nodes:", len(graph.nodes),"| edges:",len(graph.edges),"| strategies:",graph.num_strategies,"]","\tNash equilibrium found after", count, "iterations!")
   return(len(graph.nodes), len(graph.edges), graph.num_strategies, count)
 
 # generate a set of data for graphs with size over a given range
@@ -254,21 +243,16 @@ def gen_dataset(start_size,end_size,num_datapoints,num_strategies,weight):
     for point in range(0,num_datapoints):
       test = cycle_nash_test(0,generate_graph(size,random.random(),num_strategies,weight))
       data[i].append((size,test[1],test[3]))
+  save(data[i])
+
+def save(d):
+  dt.save(d)
+
 
 # Generate a 3D scatter plot of the generated data
 def scatter3d():
   plot.scatter3d(data)
 
 def scatter2d():
-  plot.scatter3d(data)
-
-# generate 2000 datapoints for games with 10 strategies and draw plot
-def example_experiment():
-  # generate 20 datapoints each for random graphs of size 1 to 100 nodes with 10-strategy games
-  gen_dataset(1,100,20,10,1000000)
-  scatter_plot()
-
-
-g = generate_graph(5,0.5,10,1000)
-tabulate_graph(g)
+  plot.scatter2d(data)
 
