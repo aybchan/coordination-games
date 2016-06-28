@@ -219,7 +219,7 @@ def gen_dataset(start_size,end_size,num_datapoints,num_strategies):
       data[i].append((size,test[1],test[3]))
 
 # Generate a 3D scatter plot of the data
-def scatter_plot():
+def scatter3d():
   plot.scatter3d(data)
 
 # Generate a 2D scatter plot of the data
@@ -229,14 +229,4 @@ def scatter2d():
 # write data array to json file
 def save():
   dt.save(data)
-
-#example_graph = Graph({0,1,2,3},{(0,1),(1,2),(2,3),(0,3)},[0,1,0,1],[[0,1],[0,1],[0,1],[0,1]],2)
-#example_random_graph = generate_graph(100,random.random(),10)
-#example_nash_cycle = cycle_nash(0, example_random_graph)
-
-# generate 2000 datapoints for games with 10 strategies and draw plot
-def example_experiment():
-  # generate 20 datapoints each for random graphs of size 1 to 100 nodes with 10-strategy games
-  gen_dataset(1,100,20,10)
-  scatter_plot()
 

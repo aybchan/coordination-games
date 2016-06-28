@@ -269,7 +269,7 @@ def averages():
   tabulate(table, headers)
 
 # Generate a 3D scatter plot of the generated data
-def scatter_plot():
+def scatter3d():
   plot.scatter3d(data)
 
 # Generate a 2D scatter plot of the generated data
@@ -280,12 +280,3 @@ def scatter2d():
 def save():
   dt.save(data)
 
-#example_graph = Graph({0,1,2,3},{(0,1),(1,2),(2,3),(0,3)},[0,1,0,1],[[0,1],[0,1],[0,1],[0,1]],2,1000)
-#example_random_graph = generate_graph(100,random.random(),10)
-#example_nash_cycle = cycle_nash(0, example_random_graph)
-
-# generate 2000 datapoints for games with 3 strategies and draw plot
-def example_experiment():
-  # generate 20 datapoints each for random graphs of size 1 to 100 nodes with 10-strategy games and max edge weight of 1,000,000
-  gen_dataset(1,100,20,10,1000000)
-  scatter_plot()
