@@ -125,7 +125,7 @@ def social(graph):
 # Return the best response of a ndoe
 def best_response(node, graph):
   if len(graph.available[node]) < 2:
-    print("Only one strategy available, no change")
+    print("Node",node,"has only one strategy available. No change!")
     return graph.chosen[node]
   speculate = [0 for i in range(graph.num_strategies)]
   edges = node_edges(node,graph)
@@ -197,12 +197,12 @@ def cycle_nodes(node, graph):
 def cycle_nash(node,graph):
   strategy_set = graph.chosen[:]
   nash_count = 0
-  count = 0
+  count = node
 
   while nash_count < len(graph.nodes):
+    current_node = count % len(graph.nodes)
     count += 1
     print("Iteration", count, "(",nash_count + 1,"iterations since last strategy change)")
-    current_node = count % len(graph.nodes)
     update_strategy(current_node, best_response(current_node,graph), graph)
     print( "\tNodes:", len(graph.nodes), "\tEdges:", len(graph.edges), "\tSocial welfare:", social(graph),"\n", "\n")
     tabulate_graph(graph)
@@ -219,20 +219,18 @@ def cycle_nash(node,graph):
 def cycle_nash_test(node, graph):
   strategy_set = graph.chosen[:]
   nash_count = 0
-  count = 0
-  p = 1
+  count = node
 
   while nash_count < len(graph.nodes):
-    count += 1
     current_node = count % len(graph.nodes)
+    count += 1
     update_strategy(current_node, best_response_non_verbose(current_node,graph), graph)
     if graph.chosen == strategy_set:
       nash_count += 1
     else:
       nash_count = 0
       strategy_set = graph.chosen[:]
-  p += 1
-  # print("[nodes:", len(graph.nodes),"| edges:",len(graph.edges),"| strategies:",graph.num_strategies,"]","\tNash equilibrium found after", count, "iterations!")
+  print("[nodes:", len(graph.nodes),"| edges:",len(graph.edges),"| strategies:",graph.num_strategies,"]","\tNash equilibrium found after", count, "iterations!")
   return(len(graph.nodes), len(graph.edges), graph.num_strategies, count)
 
 # generate a set of data for graphs with size over a given range
