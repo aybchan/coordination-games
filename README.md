@@ -21,7 +21,14 @@ We consider graphs with unweighted edges, weighted edges, and [hypergraphs][2] (
 Generating data for games on hypergraphs
 -------------
 
-Run with your version of Python 3.\*:
+1. Run the setup script to install dependency packages
+
+```
+python3.5 setup.py install
+```
+
+
+2. Run the program with some arguments
 
 ```
 python3.5 ./ 10 20 5 10 1000000
@@ -39,6 +46,29 @@ This command will generate data for 5 random graphs each of graphs of size 10 to
 A .json file with the generated data will be created in the data directory. The data for each game is saved as a tuple:
 
 >(nodes, edges, iterations to reach Nash eq.)
+
+3. Plot the data
+
+Run plot.py in the Python interpreter:
+
+```
+python3.5 -i plot.py
+```
+
+To plot the generated data on a 3d scatter plot, call the function to read the data files in the 'data' directory, and pass it through to the 3d plot function:
+
+```
+>>>scatter3d(data.read())
+```
+
+To plot the generated data on a 2D scatter plot with number of nodes and iterations to find Nash equilibiria as axes, call the function to read the data files in the 'data' directory, and pass it through to the 2d plot function:
+
+```
+>>>scatter2d(data.read())
+```
+
+The size of each point is proportional to the number of edges of the generated graph.
+
 
 
 ----------
