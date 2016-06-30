@@ -4,6 +4,7 @@ import tabulate
 import numpy as np
 import plot
 import data as dt
+import time
 
 from tabulate import tabulate
 from collections import OrderedDict
@@ -220,6 +221,7 @@ def cycle_nash_test(node, graph):
   strategy_set = graph.chosen[:]
   nash_count = 0
   count = node
+  start = time.time()
 
   while nash_count < len(graph.nodes):
     current_node = count % len(graph.nodes)
@@ -230,7 +232,9 @@ def cycle_nash_test(node, graph):
     else:
       nash_count = 0
       strategy_set = graph.chosen[:]
-  print("[nodes:", len(graph.nodes),"| edges:",len(graph.edges),"| strategies:",graph.num_strategies,"]","\tNash equilibrium found after", count, "iterations!")
+    end = time.time()
+
+  print("[nodes:", len(graph.nodes),"| edges:",len(graph.edges),"| strategies:",graph.num_strategies,"]","\tNash equilibrium found after", count, "iterations! (","{0:.2f}".format(end-start),"seconds)")
   return(len(graph.nodes), len(graph.edges), graph.num_strategies, count)
 
 # generate a set of data for graphs with size over a given range
