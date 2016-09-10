@@ -21,12 +21,11 @@ We consider graphs with unweighted edges, weighted edges, and [hypergraphs][2] (
 Generating data for games on hypergraphs
 -------------
 
-1. Run the setup script to install dependency packages
+1. Install dependencies
 
 ```
-python3.5 setup.py install
+make
 ```
-
 
 2. Run the program with some arguments
 
