@@ -23,52 +23,51 @@ Generating data for games on hypergraphs
 
 1. Install dependencies
 
-```
-make
-```
+  ```
+  make
+  ```
 
-2. Run the program with some arguments
+2. Do some experiments
 
-```
-python3.5 ./ 10 20 5 10 1000000
-```
-Arguments:
+  ```
+  python hypergraph 50 100 10 1000000
+  ```
+  Arguments:
 
-		1. Starting graph size
-		2. End graph size
-		3. Number of graphs generated for each graph size
-		4. Number of strategies available
-		5. Maximum edge weight
+      1. Graph size (number of nodes)
+      2. Upper bound on number of edges in graph
+      3. Number of graphs to be generated
+      4. Number of strategies available
+      5. Maximum edge weight
 
-This command will generate data for 5 random graphs each of graphs of size 10 to 19 with maximum edge-weight of 1,000,000, playing 10-strategy games.
+  This command will generate data for 5 random graphs each of graphs of size 10 to 19 with maximum edge-weight of 1,000,000, playing 10-strategy games.
 
-A .json file with the generated data will be created in the data directory. The data for each game is saved as a tuple:
+  A .json file with the generated data will be created in the data directory. The data for each game is saved as a tuple:
 
->(nodes, edges, iterations to reach Nash eq.)
+  >(nodes, edges, iterations to reach Nash eq.)
 
-3. Plot the data
+3. Visualise the data with matplotlib
 
-Run plot.py in the Python interpreter:
+  Run plot.py in the Python interpreter:
 
-```
-python3.5 -i plot.py
-```
+  ```
+  python -i hypergraph/plot.py
+  ```
 
-To plot the generated data on a 3d scatter plot, call the function to read the data files in the 'data' directory, and pass it through to the 3d plot function:
+  To plot the generated data on a 3d scatter plot, call the function to read the data files in the 'data' directory, and pass it through to the 3d plot function:
 
-```
->>>scatter3d(data.read())
-```
+  ```
+  import data
+  scatter3d(data.read())
+  ```
 
-To plot the generated data on a 2D scatter plot with number of nodes and iterations to find Nash equilibiria as axes, call the function to read the data files in the 'data' directory, and pass it through to the 2d plot function:
+  or, for a 2d scatter plot:
 
-```
->>>scatter2d(data.read())
-```
+  ```
+  scatter2d(data.read())
+  ```
 
-The size of each point is proportional to the number of edges of the generated graph.
-
-
+  The size of each point is proportional to the number of edges of the generated graph.
 
 ----------
 
