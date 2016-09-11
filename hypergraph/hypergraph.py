@@ -166,7 +166,7 @@ def nash(node, graph):
       strategy_set = graph.chosen[:]
     end = time.time()
 
-  print("[nodes: {0} | edges: {1} | strategies: {2}]\tNash eq. after {3} deviations! ({4:.2f} seconds)".format(len(graph.nodes), len(graph.edges), graph.num_strategies, cnt, end-start))
+  print("[nodes: {0} | edges: {1} | strategies: {2}]\tNash eq. after {3} deviations! ({4:.2f} secs)".format(len(graph.nodes), len(graph.edges), graph.num_strategies, cnt, end-start))
 
   return(len(graph.nodes), len(graph.edges), graph.num_strategies, cnt)
 
@@ -180,6 +180,6 @@ def gen_dataset(size,maxedges,num_datapoints,num_strategies,weight):
     test = nash(0,generate_graph(size,maxedges,num_strategies,weight))
     data[i].append((size,test[1],test[3]))
     sumcount += test[3]
-  print("Avg. iterations num", sumcount/num_datapoints)
+  print("Avg. deviations:", sumcount/num_datapoints)
   dt.save(data[i])
 
