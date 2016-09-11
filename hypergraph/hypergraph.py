@@ -135,8 +135,8 @@ def best_response(node, graph):
 def speculate_payoff(node, strategy, graph):
   spec_graph = copy.copy(graph)
   spec_graph.chosen[node] = strategy
-  payoffi = payoff(node, spec_graph)
-  return payoffi
+  spec_payoff = payoff(node, spec_graph)
+  return spec_payoff
 
 # Update strategy choice of a node
 def update_strategy(node, new_strategy, graph):

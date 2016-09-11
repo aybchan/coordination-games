@@ -1,20 +1,20 @@
 Coordination games on graphs
 ===================
 
-This is a Python command line program for generating experimental data for [coordination games][1] on graphs. We are interested in how many iterations of strategy updates for players in these games it takes to reach Nash equilibria.
+This is a Python command line program for generating experimental data for [coordination games][1] on graphs. We are interested in how many strategy deviations it takes to reach Nash equilibria in such games.
 
 ----------
 
 How it works
 -------------
 
-Undirected graphs of a specified size (number of nodes) are randomly generated with edges between any two nodes added with a random probability.
+Hypergraphs[2] of a specified size (number of nodes) are randomly generated with edges between any two nodes added with a random probability.
 
-Each node (player) then selects a non-empty set of strategies from a power set of a specified number of strategies (i.e for a 2-strategy game, each player randomly chooses an element from {{a}, {b}, {a,b}}). Each player picks one strategy from its set of strategies.
+Hypergraphs are graphs with hyperedges. A hyperedge can have have more than two nodes as members as opposed to conventional graphs where an edge is always a relation between two nodes.
 
-We then iterate through each node and update its strategy if it can improve its payoff (defined as the number of connected nodes picking same strategy) until we reach a strategy picking for all players that is a Nash equilibrium (no player can profitably deviate).
+Each node (i.e. a 'player' or 'agent') then selects a non-empty set of available strategies from a power set of a specified number of strategies (i.e for a 2-strategy game, each player randomly chooses from {{a}, {b}, {a,b}}). Each player picks one strategy from this set of available strategies.
 
-We consider graphs with unweighted edges, weighted edges, and [hypergraphs][2] (i.e. able to have more than two nodes in an 'edge').
+We then iterate through each player and change its strategy if it can improve its payoff (defined as the aggregate weight of all hyperedges with strategies in common) until we reach an overall strategy picking for all players that is a Nash equilibrium (i.e. no player can profitably deviate with all other players' strategies staying the same).
 
 ----------
 
@@ -30,44 +30,39 @@ Generating data for games on hypergraphs
 2. Do some experiments
 
   ```
-  python hypergraph 50 100 10 1000000
+  python hypergraph 20 10 100 5 1000000
   ```
+
   Arguments:
 
       1. Graph size (number of nodes)
-      2. Upper bound on number of edges in graph
+      2. Upper bound on number of edges each node is in
       3. Number of graphs to be generated
       4. Number of strategies available
       5. Maximum edge weight
 
-  This command will generate data for 5 random graphs each of graphs of size 10 to 19 with maximum edge-weight of 1,000,000, playing 10-strategy games.
+  This command will generate 100 random graphs size 20, with each hyperedge having at most 10 members, with edge-weights ranging from -1,000,000 to 1,000,000 (excluding 0), playing 5-strategy games.
 
   A .json file with the generated data will be created in the data directory. The data for each game is saved as a tuple:
 
-  >(nodes, edges, iterations to reach Nash eq.)
+  >(nodes, edges, number of deviations until Nash eq.)
 
 3. Visualise the data with matplotlib
 
-  Run plot.py in the Python interpreter:
+  To plot a 2D scatter plot do:
 
   ```
-  python -i hypergraph/plot.py
+  python hypergraph plot
   ```
 
-  To plot the generated data on a 3d scatter plot, call the function to read the data files in the 'data' directory, and pass it through to the 3d plot function:
+  (The size of each point is proportional to the number of edges of the generated graph.)
+
+  To visualise the data on a 3D scatter plot:
 
   ```
-  import data
-  scatter3d(data.read())
+  python hypergraph plot3d
   ```
 
-  or, for a 2d scatter plot:
-
-  ```
-  scatter2d(data.read())
-  ```
-
-  The size of each point is proportional to the number of edges of the generated graph.
 
 ----------
 
