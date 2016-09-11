@@ -46,6 +46,11 @@ Generating data for games on hypergraphs
   A .json file with the generated data will be created in the data directory. The data for each game is saved as a tuple:
 
   >(nodes, edges, number of deviations until Nash eq.)
+  
+  For running experiments with graphs of different sizes, i.e. for graphs of 10 nodes up to graphs 200 nodes, 20 times each, we can do:
+  ```
+  for i in `seq 10 200`; do python hypergraph $i 10 20 10 1000000; done
+  ```
 
 3. Visualise the data with matplotlib
 

@@ -1,4 +1,3 @@
-#!/usr/local/bin/python
 import random
 import numpy as np
 import data as dt
@@ -24,7 +23,6 @@ class Graph:
 def generate_graph(nodes, maxedges, num_strategies, weight):
   # initialise an empty graph object
   graph = Graph(set(),set(),[],[],num_strategies,weight)
-  strategy_set = power_set(strategies(num_strategies))
 
   j = 1
   # for all nodes, starting from node 0
@@ -35,13 +33,27 @@ def generate_graph(nodes, maxedges, num_strategies, weight):
       hyperedge = generate_hyperedge(nodes,n)
       w = random.choice(range(-weight,weight))
       graph.edges = graph.edges.union({(tuple(hyperedge),w)})
-    graph.available.append(random.choice(strategy_set))
+    graph.available.append(available_strategies(num_strategies))
     graph.chosen.append(random.choice(graph.available[n]))
 
   return graph
 
+# Generate a list of available strategies
+def available_strategies(max_strategies):
+    available = []
+    flag = True
+    all_strategies = [i for i in range(max_strategies)]
+
+    while flag and all_strategies:
+      choice = random.choice(all_strategies)
+      available.append(choice)
+      all_strategies.remove(choice)
+      flag = random.choice([True, False])
+
+    return available
+
 # Generate a hyperedge
-def generate_hyperedge(nodes,x):
+def generate_hyperedge(nodes,node):
     # determine degree of hyperedge
     degree_flag = True
     degree = 1
@@ -50,7 +62,7 @@ def generate_hyperedge(nodes,x):
       degree += 1
 
     # randomly add nodes to hyperedge of size degree
-    hyperedge = [x]
+    hyperedge = [node]
 
     i = 1
     while i < degree:
@@ -67,15 +79,6 @@ def strategies(num_strategies):
   for n in range(0, num_strategies):
     strategies = strategies.union({n})
   return strategies
-
-# Generate a power set from the set of strategies, minus the empty set
-def power_set(strategy_set):
-  power_set=[[]]
-  for elem in strategy_set:
-    for sub_set in power_set:
-      power_set=power_set+[list(sub_set)+[elem]]
-  power_set.remove([])
-  return power_set
 
 # Print a graph
 def tabulate_graph(graph):
