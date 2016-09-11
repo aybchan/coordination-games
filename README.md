@@ -8,7 +8,7 @@ This is a Python command line program for generating experimental data for [coor
 How it works
 -------------
 
-Hypergraphs[2] of a specified size (number of nodes) are randomly generated with edges between any two nodes added with a random probability.
+[Hypergraphs][2] of a specified size (number of nodes) are randomly generated with edges between any two nodes added with a random probability.
 
 Hypergraphs are graphs with hyperedges. A hyperedge can have have more than two nodes as members as opposed to conventional graphs where an edge is always a relation between two nodes.
 
