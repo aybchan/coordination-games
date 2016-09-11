@@ -36,7 +36,7 @@ Generating data for games on hypergraphs
   Arguments:
 
       1. Graph size (number of nodes)
-      2. Upper bound on number of edges each node is in
+      2. Upper bound on number of nodes each hyperedge contains
       3. Number of graphs to be generated
       4. Number of strategies available
       5. Maximum edge weight
