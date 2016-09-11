@@ -7,7 +7,7 @@ def save(data):
   if not os.path.exists('data'):
     os.makedirs('data')
 
-  filename = 'data/' + time.strftime("%b%d-%H%M") + '.json'
+  filename = 'data/' + time.strftime("%b%d-%H%M%S") + '.json'
   with open(filename, 'w') as f:
     json.dump(data,f)
 

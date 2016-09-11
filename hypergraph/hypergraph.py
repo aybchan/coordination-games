@@ -1,12 +1,11 @@
 #!/usr/local/bin/python
 import random
-#import tabulate
 import numpy as np
-#import plot
 import data as dt
 import time
+import copy
 
-#from tabulate import tabulate
+from tabulate import tabulate
 from collections import OrderedDict
 
 data = []
@@ -87,7 +86,7 @@ def tabulate_graph(graph):
 # Get a list of edges connected to a given node
 def node_edges(node, graph):
   edges = []
-  graph_edges = sorted(list(graph.edges))
+  graph_edges = list(graph.edges)
   for edge in range(0,len(graph_edges)):
     if node in graph_edges[edge][0]:
       edges.append(graph_edges[edge])
@@ -121,25 +120,23 @@ def social(graph):
 def best_response(node, graph):
   if len(graph.available[node]) < 2:
     return graph.chosen[node]
-  speculate = [0 for i in range(graph.num_strategies)]
-  edges = node_edges(node,graph)
-  for edge in range(len(edges)):
-    common_strategy = set()
-    for n in edges[edge][0]:
-      if (not n == node) and graph.chosen[n] in graph.available[node]:
-        common_strategy = common_strategy.union({graph.chosen[n]})
-    if len(common_strategy) == 1:
-      speculate[tuple(common_strategy)[0]] += edges[edge][1]
 
-  strategy = graph.chosen[node]
-  max = payoff(node,graph)
+  best_payoff = payoff(node, graph)
+  best_strategy = graph.chosen[node]
 
-  for i in range(len(speculate)):
-    if max < speculate[i]:
-      strategy = i
-      max = speculate[i]
+  for strategy in graph.available[node]:
+    if not strategy == best_strategy:
+      speculate = speculate_payoff(node,strategy,graph)
+      if speculate > best_payoff:
+        best_payoff = speculate
+        best_strategy = strategy
+  return best_strategy
 
-  return strategy
+def speculate_payoff(node, strategy, graph):
+  spec_graph = copy.copy(graph)
+  spec_graph.chosen[node] = strategy
+  payoffi = payoff(node, spec_graph)
+  return payoffi
 
 # Update strategy choice of a node
 def update_strategy(node, new_strategy, graph):
@@ -169,7 +166,8 @@ def nash(node, graph):
       strategy_set = graph.chosen[:]
     end = time.time()
 
-  print("[nodes:", len(graph.nodes),"| edges:",len(graph.edges),"| strategies:",graph.num_strategies,"]","\tNash equilibrium found after", cnt, "iterations! (","{0:.2f}".format(end-start),"seconds)")
+  print("[nodes: {0} | edges: {1} | strategies: {2}]\tNash eq. after {3} deviations! ({4:.2f} seconds)".format(len(graph.nodes), len(graph.edges), graph.num_strategies, cnt, end-start))
+
   return(len(graph.nodes), len(graph.edges), graph.num_strategies, cnt)
 
 # generate a set of data for graphs with size over a given range
